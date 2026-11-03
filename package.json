@@ -1,0 +1,12 @@
+{
+  "name": "sivashanmuka-pos",
+  "version": "1.0.0",
+  "description": "Multi-shop point of sale for SIVASHANMUKA MULTI STORE and SIVASHANMUKA SMART SHOP. The repository keeps its existing React/TypeScript/Vite client and adds a modular Express API in TypeScript with PostgreSQL and Prisma.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

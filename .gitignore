@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build output and local tooling caches
+dist/
+dist-ssr/
+build/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Environment files and secrets (keep the example template tracked)
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Local databases and backups
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.backup
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows and IDE user state
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
