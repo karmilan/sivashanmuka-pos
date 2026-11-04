@@ -21,6 +21,9 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
+# Private project documents
+docs/
+
 # Local databases and backups
 *.sqlite
 *.sqlite3
