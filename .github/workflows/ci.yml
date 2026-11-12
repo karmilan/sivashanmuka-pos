@@ -1,0 +1,47 @@
+name: Phase 1 CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            client/package-lock.json
+            server/package-lock.json
+      - name: Install API dependencies
+        run: npm ci
+        working-directory: server
+      - name: Install client dependencies
+        run: npm ci
+        working-directory: client
+      - name: Validate Prisma schema
+        run: npm run db:validate
+        working-directory: server
+      - name: Type-check API
+        run: npm run typecheck
+        working-directory: server
+      - name: Test API authorization and security
+        run: npm test
+        working-directory: server
+      - name: Lint API
+        run: npm run lint
+        working-directory: server
+      - name: Build API
+        run: npm run build
+        working-directory: server
+      - name: Lint client
+        run: npm run lint
+        working-directory: client
+      - name: Build client
+        run: npm run build
+        working-directory: client

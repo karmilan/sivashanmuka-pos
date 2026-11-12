@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MANAGER
+  CASHIER
+}
+
+model Shop {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  active      Boolean      @default(true)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  memberships Membership[]
+  auditLogs   AuditLog[]
+
+  @@map("shops")
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  name         String
+  passwordHash String       @map("password_hash")
+  active       Boolean      @default(true)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  memberships  Membership[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+model Membership {
+  userId    String   @map("user_id")
+  shopId    String   @map("shop_id")
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+
+  @@id([userId, shopId])
+  @@index([shopId, role])
+  @@map("memberships")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  actorId   String?  @map("actor_id")
+  shopId    String?  @map("shop_id")
+  action    String
+  entity    String
+  entityId  String?  @map("entity_id")
+  requestId String   @map("request_id")
+  ipAddress String?  @map("ip_address")
+  metadata  Json?
+  createdAt DateTime @default(now()) @map("created_at")
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  shop      Shop?    @relation(fields: [shopId], references: [id], onDelete: SetNull)
+
+  @@index([shopId, createdAt])
+  @@index([actorId, createdAt])
+  @@map("audit_logs")
+}

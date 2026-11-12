@@ -1,11 +1,52 @@
 {
-  "name": "server",
+  "name": "@sivashanmuka-pos/server",
   "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "private": true,
+  "engines": {
+    "node": ">=22"
   },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "type": "module",
+  "main": "dist/server/src/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "start": "node dist/server/src/server.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "node --import tsx --test src/auth/access.test.ts src/auth/schemas.test.ts src/auth/login.test.ts src/app.test.ts",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:migrate": "node scripts/require-neon-development-target.mjs && prisma migrate dev",
+    "db:deploy": "node scripts/require-neon-development-target.mjs && prisma migrate deploy",
+    "db:seed": "node scripts/require-neon-development-target.mjs && tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0",
+    "bcryptjs": "^3.0.2",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3",
+    "pino-http": "^10.5.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/connect-pg-simple": "^7.0.3",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/express-session": "^1.18.2",
+    "@types/node": "^24.10.0",
+    "@types/pg": "^8.15.6",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "prisma": "^6.19.0",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.46.4"
+  }
 }

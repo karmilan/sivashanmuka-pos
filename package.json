@@ -2,11 +2,29 @@
   "name": "sivashanmuka-pos",
   "version": "1.0.0",
   "description": "Multi-shop point of sale for SIVASHANMUKA MULTI STORE and SIVASHANMUKA SMART SHOP. The repository keeps its existing React/TypeScript/Vite client and adds a modular Express API in TypeScript with PostgreSQL and Prisma.",
+  "engines": {
+    "node": ">=22"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "dev": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "typecheck": "npm run typecheck --prefix server && npm run build --prefix client",
+    "lint": "npm run lint --prefix server && npm run lint --prefix client",
+    "test": "npm run test --prefix server",
+    "db:validate": "npm run db:validate --prefix server",
+    "db:generate": "npm run db:generate --prefix server",
+    "db:migrate": "npm run db:migrate --prefix server",
+    "db:deploy": "npm run db:deploy --prefix server",
+    "db:seed": "npm run db:seed --prefix server"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@neon/config": "^1.14.0",
+    "@neon/env": "^2.1.3"
+  }
 }
