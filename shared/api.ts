@@ -52,6 +52,12 @@ export interface CategoryListDto {
   total: number
 }
 
+export interface CategoryListQuery {
+  page: number
+  pageSize: number
+  active?: boolean
+}
+
 export interface ProductBarcodeDto {
   id: string
   productId: string

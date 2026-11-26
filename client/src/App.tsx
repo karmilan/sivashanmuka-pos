@@ -2,6 +2,7 @@ import { useRef, useState, type FormEvent } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { Role, SessionDto, ShopDto, UserDto } from '../../shared/api'
 import { Button } from './components/ui/button'
+import { CategoryListPage } from './features/categories/CategoryListPage'
 import { ApiClientError, apiRequest, getSession } from './lib/api'
 import './App.css'
 
@@ -242,7 +243,7 @@ function AccountWorkspace() {
 
 function AppWorkspace({ session }: { session: SessionDto }) {
   const queryClient = useQueryClient()
-  const [view, setView] = useState<'shops' | 'people' | 'account'>('shops')
+  const [view, setView] = useState<'shops' | 'categories' | 'people' | 'account'>('shops')
   const user = session.user
   const isOwner = user.memberships.some(({ role }) => role === 'OWNER')
   const shopsQuery = useQuery({ queryKey: ['shops'], queryFn: () => apiRequest<ShopList>('/shops') })
@@ -260,6 +261,7 @@ function AppWorkspace({ session }: { session: SessionDto }) {
         <p className="nav-caption">WORKSPACE</p>
         <nav aria-label="Main navigation">
           <button className={view === 'shops' ? 'nav-item active' : 'nav-item'} onClick={() => setView('shops')}><span className="nav-symbol">⌂</span> Shops</button>
+          <button className={view === 'categories' ? 'nav-item active' : 'nav-item'} onClick={() => setView('categories')}><span className="nav-symbol">▤</span> Categories</button>
           {isOwner && <button className={view === 'people' ? 'nav-item active' : 'nav-item'} onClick={() => setView('people')}><span className="nav-symbol">◎</span> Staff accounts</button>}
           <button className={view === 'account' ? 'nav-item active' : 'nav-item'} onClick={() => setView('account')}><span className="nav-symbol">◉</span> Account</button>
         </nav>
@@ -270,15 +272,16 @@ function AppWorkspace({ session }: { session: SessionDto }) {
       </aside>
       <main className="main-area">
         <header className="topbar">
-          <div className="breadcrumb">Workspace <span>/</span> {view === 'shops' ? 'Shops' : view === 'people' ? 'Staff accounts' : 'Account'}</div>
+          <div className="breadcrumb">Workspace <span>/</span> {view === 'shops' ? 'Shops' : view === 'categories' ? 'Categories' : view === 'people' ? 'Staff accounts' : 'Account'}</div>
           <div className="profile-chip"><span>{user.name.slice(0, 1).toUpperCase()}</span><div><strong>{user.name}</strong><small>{user.email}</small></div></div>
         </header>
         <div className="page-content">
-          <div className="page-title"><div><p className="eyebrow">PHASE 1 · FOUNDATION</p><h1>{view === 'shops' ? 'Your workspace' : view === 'people' ? 'People & access' : 'Your account'}</h1></div><span className="secure-label"><i /> Secure session</span></div>
-          {shopsQuery.isLoading && <p className="muted">Loading your assigned shops…</p>}
-          {shopsQuery.isError && <p className="form-error" role="alert">{errorText(shopsQuery.error)}</p>}
+          <div className="page-title"><div><p className="eyebrow">{view === 'categories' ? 'SHARED CATALOGUE' : 'PHASE 1 · FOUNDATION'}</p><h1>{view === 'shops' ? 'Your workspace' : view === 'categories' ? 'Categories' : view === 'people' ? 'People & access' : 'Your account'}</h1></div><span className="secure-label"><i /> Secure session</span></div>
+          {(view === 'shops' || view === 'people') && shopsQuery.isLoading && <p className="muted">Loading your assigned shops…</p>}
+          {(view === 'shops' || view === 'people') && shopsQuery.isError && <p className="form-error" role="alert">{errorText(shopsQuery.error)}</p>}
           {shopsQuery.data && view === 'shops' && <ShopWorkspace shops={shopsQuery.data.shops} />}
           {shopsQuery.data && view === 'people' && isOwner && <PeopleWorkspace shops={shopsQuery.data.shops} />}
+          {view === 'categories' && <CategoryListPage />}
           {view === 'account' && <AccountWorkspace />}
         </div>
       </main>
