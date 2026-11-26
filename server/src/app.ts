@@ -8,6 +8,8 @@ import { pinoHttp } from 'pino-http'
 import { env } from './config/env.js'
 import { enforceOriginAndCsrf } from './middleware/csrf.js'
 import authRouter from './routes/auth.js'
+import categoriesRouter from './routes/categories.js'
+import productsRouter from './routes/products.js'
 import shopsRouter from './routes/shops.js'
 import usersRouter from './routes/users.js'
 import { prisma } from './lib/prisma.js'
@@ -65,6 +67,8 @@ export function createApp(auth = authRouter) {
 
   const api = express.Router()
   api.use('/auth', auth)
+  api.use('/categories', categoriesRouter)
+  api.use('/products', productsRouter)
   api.use('/shops', shopsRouter)
   api.use('/users', usersRouter)
   app.use('/api/v1', api)

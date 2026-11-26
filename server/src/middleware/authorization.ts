@@ -18,6 +18,14 @@ export const requireAuth: RequestHandler = async (request, _response, next) => {
   return next()
 }
 
+export const requireCatalogueMembership: RequestHandler = (request, _response, next) => {
+  if (!request.auth) return next(new ApiError(401, 'UNAUTHENTICATED', 'Sign in is required.'))
+  if (request.auth.memberships.length === 0) {
+    return next(new ApiError(403, 'SHOP_FORBIDDEN', 'An active shop membership is required to access the catalogue.'))
+  }
+  return next()
+}
+
 export const requireOwner: RequestHandler = (request, _response, next) => {
   if (!request.auth || !hasRole(request.auth.memberships, [Role.OWNER])) {
     return next(new ApiError(403, 'FORBIDDEN', 'Owner access is required.'))

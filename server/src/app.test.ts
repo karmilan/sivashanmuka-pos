@@ -41,6 +41,15 @@ test('protected session endpoint rejects anonymous requests', async () => {
   assert.equal(result.error.code, 'UNAUTHENTICATED')
 })
 
+test('catalogue reads reject anonymous requests', async () => {
+  for (const resource of ['categories', 'products']) {
+    const response = await fetch(`${baseUrl}/api/v1/${resource}`)
+    assert.equal(response.status, 401)
+    const result = await response.json() as { error: { code: string } }
+    assert.equal(result.error.code, 'UNAUTHENTICATED')
+  }
+})
+
 test('state-changing requests reject untrusted origins', async () => {
   const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
     method: 'POST',

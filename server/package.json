@@ -13,7 +13,7 @@
     "start": "node dist/server/src/server.js",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",
-    "test": "node --import tsx --test src/auth/access.test.ts src/auth/schemas.test.ts src/auth/login.test.ts src/app.test.ts",
+    "test": "node --import tsx --test src/auth/access.test.ts src/auth/schemas.test.ts src/auth/login.test.ts src/validation/catalogue.test.ts src/app.test.ts",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
     "db:migrate": "node scripts/require-neon-development-target.mjs && prisma migrate dev",
